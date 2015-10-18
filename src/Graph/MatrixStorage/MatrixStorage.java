@@ -8,9 +8,9 @@ import Graph.Vertex;
 import java.util.LinkedList;
 
 public class MatrixStorage<V> implements Storage<V> {
+
     private DynamicArray<MSVertex<V>> vertices = new DynamicArray<>();
     private DynamicArray<DynamicArray<Edge>> edges = new DynamicArray<>();
-
     int vertexCount = 0;
     int edgeCount = 0;
 
@@ -42,8 +42,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void removeVertex(Vertex vertex) {
+    public void removeVertex(Vertex<V> vertex) {
         int index = ((MSVertex<V>) vertex).getId();
 
         edgeCount -= getEdgesIncidentTo(vertex).length;
@@ -63,8 +62,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Edge getEdge(Vertex start, Vertex end) {
+    public Edge getEdge(Vertex<V> start, Vertex<V> end) {
         return edges.get(
             ((MSVertex<V>) start).getId()
         ).get(
@@ -73,9 +71,8 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Edge addEdge(Vertex start, Vertex end, float weight) {
-        Edge edge = new Edge(start, end, weight);
+    public Edge addEdge(Vertex<V> start, Vertex<V> end, float weight) {
+        Edge edge = new Edge<Vertex<V>>(start, end, weight);
 
         edges.get(
             ((MSVertex<V>) start).getId()
@@ -89,8 +86,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void removeEdge(Edge edge) {
+    public void removeEdge(Edge<Vertex<V>> edge) {
         edges.get(
                 ((MSVertex<V>) edge.getStart()).getId()
         ).set(
@@ -101,8 +97,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Vertex[] getNeighboursOf(Vertex vertex) {
+    public Vertex[] getNeighboursOf(Vertex<V> vertex) {
         int index = ((MSVertex<V>) vertex).getId();
         Edge edge;
         LinkedList<Vertex> neighbourVertices = new LinkedList<>();
@@ -119,8 +114,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Edge[] getEdgesIncidentTo(Vertex vertex) {
+    public Edge[] getEdgesIncidentTo(Vertex<V> vertex) {
         int index = ((MSVertex<V>) vertex).getId();
         Edge edge;
         LinkedList<Edge> incidentEdges = new LinkedList<>();

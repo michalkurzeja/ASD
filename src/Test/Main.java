@@ -2,13 +2,14 @@ package Test;
 
 import Graph.Graph;
 import Graph.Edge;
+import Graph.ListStorage.ListStorage;
 import Graph.Vertex;
 import Graph.Import.CSVImporter;
 import Graph.MatrixStorage.MatrixStorage;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Graph<Integer> graph = new Graph<Integer>(new MatrixStorage<>());
+        Graph<Integer> graph = new Graph<Integer>(new ListStorage<>());
 
         CSVImporter.importGraph(graph, "src/Test/graf.txt");
 
@@ -19,7 +20,5 @@ public class Main {
 
         Vertex[] neighbours = graph.getNeighboursOf(v1);
         Edge[] edges = graph.getEdgesIncidentTo(v1);
-
-
     }
 }

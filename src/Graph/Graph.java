@@ -1,47 +1,45 @@
 package Graph;
 
-import Graph.Edge.Edge;
-import Graph.Exception.EdgeNotFound;
-import Graph.Exception.VertexIdNotFound;
-import Graph.Storage.Storage;
-import Graph.Vertex.Vertex;
+public class Graph<V> {
+    Storage<V> storage;
 
-public class Graph {
-    Storage storage;
-
-    public Graph(Storage storage) {
+    public Graph(Storage<V> storage) {
         this.storage = storage;
     }
-    
-    public Vertex[] getVertices() {
-        return storage.getVertices();
-    }
-    
-    public Vertex getVertex(int id) throws VertexIdNotFound {
-        return storage.getVertex(id);
+
+    public Vertex findVertex(V data) {
+        return storage.findVertex(data);
     }
 
-    public void addVertex(Vertex vertex) {
-        storage.addVertex(vertex);
+    public Vertex addVertex(V data) {
+        return storage.addVertex(data);
     }
-    
-    public void removeVertex(Vertex vertex) throws VertexIdNotFound, EdgeNotFound {
+
+    public void removeVertex(Vertex vertex) {
         storage.removeVertex(vertex);
     }
 
-    public Edge getEdge(Vertex start, Vertex end) throws VertexIdNotFound, EdgeNotFound {
+    public Edge getEdge(Vertex start, Vertex end) {
         return storage.getEdge(start, end);
     }
 
-    public void addEdge(Edge edge) throws VertexIdNotFound {
-        storage.addEdge(edge);
+    public void addEdge(Vertex start, Vertex end) {
+        storage.addEdge(start, end, Edge.DEFAULT_WEIGHT);
     }
 
-    public void removeEdge(Edge edge)  throws EdgeNotFound {
+    public Edge addEdge(Vertex start, Vertex end, float weight) {
+        return storage.addEdge(start, end, weight);
+    }
+
+    public void removeEdge(Edge edge) {
         storage.removeEdge(edge);
     }
-    
-    public Edge[] getEdgesIncidentTo(Vertex vertex) throws VertexIdNotFound {
+
+    public Vertex[] getNeighboursOf(Vertex vertex) {
+        return storage.getNeighboursOf(vertex);
+    }
+
+    public Edge[] getEdgesIncidentTo(Vertex vertex) {
         return storage.getEdgesIncidentTo(vertex);
     }
 
@@ -49,10 +47,14 @@ public class Graph {
         return false; // TODO
     }
 
+    public Vertex[] getVertices() {
+        return storage.getVertices();
+    }
+
     public int getVertexCount() {
         return storage.getVertexCount();
     }
-    
+
     public int getEdgeCount() {
         return storage.getEdgeCount();
     }

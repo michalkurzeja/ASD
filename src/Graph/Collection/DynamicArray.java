@@ -1,7 +1,5 @@
 package Graph.Collection;
 
-import java.lang.reflect.Array;
-
 public class DynamicArray<V> {
     private V[] array;
 

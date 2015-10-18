@@ -44,7 +44,15 @@ public class Graph<V> {
     }
 
     public boolean areNeighbours(Vertex v1, Vertex v2) {
-        return false; // TODO
+        Vertex[] neighbours = getNeighboursOf(v1);
+
+        for (Vertex neighbour : neighbours) {
+            if (neighbour.equals(v2)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Vertex[] getVertices() {

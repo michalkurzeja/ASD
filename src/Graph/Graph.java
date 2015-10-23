@@ -1,5 +1,7 @@
 package Graph;
 
+import java.util.*;
+
 public class Graph<V> {
     Storage<V> storage;
 
@@ -65,5 +67,46 @@ public class Graph<V> {
 
     public int getEdgeCount() {
         return storage.getEdgeCount();
+    }
+
+    @SuppressWarnings("unchecked")
+    public Edge[] findPath(Vertex<V> start, Vertex<V> end) {
+        float INFINITY = -1;
+        HashMap<Vertex<V>, Float> distance = new HashMap<>();
+        HashMap<Vertex<V>, Vertex> parents = new HashMap<>();
+        LinkedList<Vertex<V>> Q = new LinkedList<>();
+        Vertex<V> current;
+
+        for (Vertex<V> vertex : getVertices()) {
+            distance.put(vertex, INFINITY);
+            parents.put(vertex, null);
+        }
+
+        distance.put(start, (float) 0);
+        Q.add(start);
+
+        while (!Q.isEmpty()) {
+            current = Q.pop();
+
+            for (Vertex neighbour : getNeighboursOf(current)) {
+                if (distance.get(neighbour) == INFINITY) {
+                    distance.put(neighbour, distance.get(current) + getEdge(current, neighbour).getWeight());
+                    parents.put(neighbour, current);
+                    Q.add(neighbour);
+                }
+            }
+        }
+
+        LinkedList<Edge> path = new LinkedList<>();
+        current = end;
+        Vertex parent = parents.get(current);
+
+        while (null != parent) {
+            path.push(getEdge(parent, current));
+            current = parent;
+            parent = parents.get(current);
+        }
+
+        return path.toArray(new Edge[path.size()]);
     }
 }

@@ -13,7 +13,7 @@ class LSEdge<V extends Vertex> extends Edge<V> implements ListNode {
         super(start, end);
     }
 
-    public LSEdge(V start, V end, float weight) {
+    public LSEdge(V start, V end, int weight) {
         super(start, end, weight);
     }
 

@@ -10,6 +10,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+@SuppressWarnings("unchecked")
 public class CSVImporter {
     public static void importGraph(Graph<Integer> graph, String path) throws IOException {
         HashMap<Integer, Vertex> vertices = new HashMap<>();
@@ -18,7 +19,7 @@ public class CSVImporter {
         for (CSVRecord record : parser) {
             int value1 = Integer.parseInt(record.get(0).trim());
             int value2 = Integer.parseInt(record.get(1).trim());
-            float weight = Float.parseFloat(record.get(2).trim());
+            int weight = Integer.parseInt(record.get(2).trim());
 
             if (!vertices.containsKey(value1)) {
                 vertices.put(value1, graph.addVertex(value1));

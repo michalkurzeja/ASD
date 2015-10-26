@@ -71,7 +71,7 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
-    public Edge addEdge(Vertex<V> start, Vertex<V> end, float weight) {
+    public Edge addEdge(Vertex<V> start, Vertex<V> end, int weight) {
         Edge edge = new Edge<Vertex<V>>(start, end, weight);
 
         edges.get(
@@ -137,9 +137,50 @@ public class MatrixStorage<V> implements Storage<V> {
     }
 
     @Override
+    public Edge[] getEdgesOutgoingFrom(Vertex<V> vertex) {
+        int index = ((MSVertex<V>) vertex).getId();
+        Edge edge;
+        LinkedList<Edge> incidentEdges = new LinkedList<>();
+
+        for (int i = 0; i < vertexCount; i++) {
+            edge = edges.get(index).get(i); // outgoing edge
+
+            if (null != edge && !incidentEdges.contains(edge)) {
+                incidentEdges.add(edge);
+            }
+        }
+
+        return incidentEdges.toArray(new Edge[incidentEdges.size()]);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public Vertex[] getVertices() {
         return vertices.getArray(new MSVertex[vertexCount]);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Edge[] getEdges() {
+        LinkedList<Edge> edgeList = new LinkedList<>();
+        Edge edge;
+        DynamicArray<Edge> edgeRow;
+
+        for (int i = 0; i < vertexCount; i++) {
+            edgeRow = edges.get(i);
+
+            if (null != edgeRow) {
+                for (int j = 0; j < vertexCount; j++) {
+                    edge = edgeRow.get(j);
+
+                    if (null != edge) {
+                        edgeList.add(edge);
+                    }
+                }
+            }
+        }
+
+        return edgeList.toArray(new Edge[edgeList.size()]);
     }
 
     @Override

@@ -1,18 +1,18 @@
 package Graph;
 
 public class Edge<V extends Vertex> {
-    static final public float DEFAULT_WEIGHT = 1;
+    static final public int DEFAULT_WEIGHT = 1;
 
     private V start;
     private V end;
-    private float weight = DEFAULT_WEIGHT;
+    private int weight = DEFAULT_WEIGHT;
 
     public Edge(V start, V end) {
         this.start = start;
         this.end = end;
     }
 
-    public Edge(V start, V end, float weight) {
+    public Edge(V start, V end, int weight) {
         this.start = start;
         this.end = end;
         this.weight = weight;
@@ -26,7 +26,7 @@ public class Edge<V extends Vertex> {
         return end;
     }
 
-    public float getWeight() {
+    public int getWeight() {
         return weight;
     }
 

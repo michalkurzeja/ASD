@@ -5,6 +5,8 @@ import Graph.Edge;
 import Graph.Storage;
 import Graph.Vertex;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ListStorage<V> implements Storage<V> {
@@ -66,7 +68,7 @@ public class ListStorage<V> implements Storage<V> {
     }
 
     @Override
-    public Edge addEdge(Vertex<V> start, Vertex<V> end, float weight) {
+    public Edge addEdge(Vertex<V> start, Vertex<V> end, int weight) {
         LSEdge<LSVertex<V>> edge = new LSEdge<>((LSVertex<V>) start, (LSVertex<V>) end, weight);
         ((LSVertex<V>) start).getOutgoingEdges().add(edge);
         ((LSVertex<V>) end).getIncomingEdges().add(new LSEdge<>(edge));
@@ -121,6 +123,17 @@ public class ListStorage<V> implements Storage<V> {
     }
 
     @Override
+    public Edge[] getEdgesOutgoingFrom(Vertex<V> vertex) {
+        LinkedList<Edge> edges = new LinkedList<>();
+
+        for (Edge edge : ((LSVertex<V>) vertex).getOutgoingEdges()) {
+            edges.add(edge);
+        }
+
+        return edges.toArray(new Edge[edges.size()]);
+    }
+
+    @Override
     public Vertex[] getVertices() {
         LinkedList<Vertex> vertices = new LinkedList<>();
 
@@ -129,6 +142,21 @@ public class ListStorage<V> implements Storage<V> {
         }
 
         return vertices.toArray(new Vertex[vertices.size()]);
+    }
+
+    @Override
+    public Edge[] getEdges() {
+        HashMap<Edge, Edge> edgeMap = new HashMap<>();
+
+        for (LSVertex<V> vertex : this.vertices) {
+            for (LSEdge<LSVertex<V>> e : vertex.getOutgoingEdges()) {
+                edgeMap.put(e, e);
+            }
+        }
+
+        Collection<Edge> edgeCollection = edgeMap.values();
+
+        return edgeCollection.toArray(new Edge[edgeCollection.size()]);
     }
 
     @Override

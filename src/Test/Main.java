@@ -7,6 +7,7 @@ import Graph.Vertex;
 import Graph.Import.CSVImporter;
 import Graph.MatrixStorage.MatrixStorage;
 
+@SuppressWarnings("unchecked")
 public class Main {
     public static void main(String[] args) throws Exception {
         Graph<Integer> graph = new Graph<Integer>(new ListStorage<>());
@@ -18,10 +19,12 @@ public class Main {
         Vertex v3 = graph.addVertex(3);
 
         graph.addEdge(v1, v2);
-//        graph.addEdge(v1, v3);
+        graph.addEdge(v1, v3);
         graph.addEdge(v2, v3);
 
-//        System.out.println(String.format("Are neighbours: %b", graph.areNeighbours(v1, v2)));
+        Edge[] edges = graph.getEdges();
+
+        System.out.println(String.format("Are neighbours: %b", graph.areNeighbours(v1, v2)));
 
         Edge[] path = graph.findPath(v1, v3);
     }

@@ -29,7 +29,7 @@ public class Graph<V> {
         storage.addEdge(start, end, Edge.DEFAULT_WEIGHT);
     }
 
-    public Edge addEdge(Vertex<V> start, Vertex<V> end, float weight) {
+    public Edge addEdge(Vertex<V> start, Vertex<V> end, int weight) {
         return storage.addEdge(start, end, weight);
     }
 
@@ -43,6 +43,10 @@ public class Graph<V> {
 
     public Edge[] getEdgesIncidentTo(Vertex<V> vertex) {
         return storage.getEdgesIncidentTo(vertex);
+    }
+
+    public Edge[] getEdgesOutgoingFrom(Vertex<V> vertex) {
+        return storage.getEdgesOutgoingFrom(vertex);
     }
 
     public boolean areNeighbours(Vertex<V> v1, Vertex<V> v2) {
@@ -59,6 +63,10 @@ public class Graph<V> {
 
     public Vertex[] getVertices() {
         return storage.getVertices();
+    }
+
+    public Edge[] getEdges() {
+        return storage.getEdges();
     }
 
     public int getVertexCount() {

@@ -10,15 +10,16 @@ import Graph.Storage;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class FordBellman {
-    final static Integer INFINITY = Integer.MAX_VALUE-1;
+    final static Integer INFINITY = Integer.MAX_VALUE;
 
     private Graph<Integer> graph;
-    private Map<Vertex<Integer>, Integer> weights = new HashMap<>();
-    private Map<Vertex<Integer>, Vertex<Integer>> predecessors = new HashMap<>();
+    private Map<Vertex<Integer>, Integer> weights;
+    private Map<Vertex<Integer>, Vertex<Integer>> predecessors;
 
     private FordBellman(Storage<Integer> storage) {
         graph = new Graph<Integer>(storage);
@@ -35,10 +36,35 @@ public class FordBellman {
     public void findShortestPath(int sourceVal, int targetVal) throws IOException, NegativeCycle {
         CSVImporter.importGraph(graph, "src/FordBellman/graph.txt");
 
-        calculateDistances(graph.findVertex(sourceVal));
+        Vertex source = graph.findVertex(sourceVal);
+        Vertex target = graph.findVertex(targetVal);
+
+        long startTime = System.currentTimeMillis();
+        calculateDistances(source);
+        long timeElapsed = System.currentTimeMillis() - startTime;
+
+        Vertex current = target;
+        Vertex predecessor = predecessors.get(current);
+        LinkedList<String> path = new LinkedList<>();
+        path.push(target.getData().toString());
+
+        while (null != predecessor) {
+            path.push(graph.getEdge(predecessor, current).getStart().getData().toString());
+            current = predecessor;
+            predecessor = predecessors.get(current);
+        }
+
+        String[] ids = path.toArray(new String[path.size()]);
+
+        System.out.println(String.format("Path cost: %d", weights.get(target)));
+        System.out.println(String.join(" -> ", ids));
+        System.out.println(String.format("Time elapsed: %d", timeElapsed));
     }
 
     private void calculateDistances(Vertex<Integer> source) throws NegativeCycle {
+        weights = new HashMap<>(graph.getVertexCount());
+        predecessors = new HashMap<>(graph.getVertexCount());
+
         for (Vertex<Integer> v : graph.getVertices()) {
             if (v.equals(source)) {
                 weights.put(v, 0);
@@ -47,11 +73,12 @@ public class FordBellman {
             }
         }
 
+        Edge[] allEdges = graph.getEdges();
         Vertex<Integer> u, v;
         int w;
 
         for (int i = 1; i < graph.getVertexCount() - 1; i++) {
-            for (Edge<Vertex<Integer>> e : graph.getEdges()) {
+            for (Edge<Vertex<Integer>> e : allEdges) {
                 u = e.getStart();
                 v = e.getEnd();
                 w = e.getWeight();
@@ -67,7 +94,7 @@ public class FordBellman {
             }
         }
 
-        for (Edge<Vertex<Integer>> e : graph.getEdges()) {
+        for (Edge<Vertex<Integer>> e : allEdges) {
             u = e.getStart();
             v = e.getEnd();
 

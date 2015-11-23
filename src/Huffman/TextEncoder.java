@@ -54,7 +54,7 @@ public class TextEncoder {
         oos.writeObject(tree);
         oos.close();
 
-        compressedLength = bitIndex/8 + baos.size();
+        compressedLength = bitIndex/8 + (bitIndex % 8 > 0 ? 1 : 0) + 1 + baos.size();
 
         return ((inputLength - compressedLength) / inputLength);
     }

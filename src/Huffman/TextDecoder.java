@@ -2,6 +2,8 @@ package Huffman;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.BitSet;
+
 import Huffman.HuffmanTree.Node;
 
 public class TextDecoder {
@@ -11,19 +13,17 @@ public class TextDecoder {
 
         ObjectInput objectInput = new ObjectInputStream(bufferedInput);
         HuffmanTree tree = (HuffmanTree) objectInput.readObject();
+        int inputLength = (int) objectInput.readObject();
+        BitSet bits = (BitSet) objectInput.readObject();
 
         OutputStream bufferedOutput = new BufferedOutputStream(output);
 
-        int read;
-        char c;
         Node current = tree.getRoot();
 
-        while (0 <= (read = bufferedInput.read())) {
-            c = (char) read;
-
-            current = c == '0'
-                    ? current.getLeftChild()
-                    : current.getRightChild();
+        for (int i=0; i<inputLength; i++) {
+            current = bits.get(i)
+                    ? current.getRightChild()
+                    : current.getLeftChild();
 
             if (current.isLeaf()) {
                 bufferedOutput.write(current.getSymbol().string.getBytes(StandardCharsets.UTF_8));

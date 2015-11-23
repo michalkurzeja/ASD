@@ -2,6 +2,7 @@ package Huffman;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.BitSet;
 
 public class TextEncoder {
 
@@ -27,6 +28,8 @@ public class TextEncoder {
         StringBuilder builder;
         String code;
         int read;
+        BitSet bits = new BitSet();
+        int bitIndex = 0;
 
         while (0 < (read = reader.read(buffer))) {
             inputLength += read;
@@ -34,19 +37,24 @@ public class TextEncoder {
             builder.append(buffer, 0, read);
 
             code = tree.getStringCode(builder.toString());
-            compressedLength += code.length();
 
-            bufferedOutput.write(code.getBytes(StandardCharsets.UTF_8));
+            for (char c : code.toCharArray()) {
+                bits.set(bitIndex++, c != '0');
+            }
+
+            compressedLength += code.length();
         }
 
+        objectOutput.writeObject(bitIndex);
+        objectOutput.writeObject(bits);
         objectOutput.flush();
-//
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(baos);
-//        oos.writeObject(tree);
-//        oos.close();
 
-        compressedLength = compressedLength/8;// + baos.size();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(tree);
+        oos.close();
+
+        compressedLength = bitIndex/8 + baos.size();
 
         return ((inputLength - compressedLength) / inputLength);
     }

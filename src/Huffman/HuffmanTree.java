@@ -28,7 +28,7 @@ public class HuffmanTree implements Serializable {
             if (node.symbol.string.equals(string)) {
                 StringBuilder builder = new StringBuilder();
                 Node current = node;
-                Node parent = null;
+                Node parent;
 
                 while (null != current.parent) {
                     parent = current.parent;

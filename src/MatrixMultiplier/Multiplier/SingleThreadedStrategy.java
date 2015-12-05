@@ -19,7 +19,7 @@ public class SingleThreadedStrategy implements MultiplicationStrategy {
     private double getCellValue(Matrix M1, Matrix M2, int i, int j) {
         double value = 0;
 
-        for (int k=0; k<M1.getRows(); k++) {
+        for (int k=0; k<M1.getCols(); k++) {
             value += M1.get(i, k) * M2.get(k, j);
         }
 

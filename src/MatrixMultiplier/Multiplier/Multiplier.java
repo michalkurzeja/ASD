@@ -18,14 +18,14 @@ public class Multiplier {
         Matrix matrix = iterator.next();
 
         while (iterator.hasNext()) {
-            matrix = multiply(iterator.next(), matrix);
+            matrix = multiply(matrix, iterator.next());
         }
 
         return matrix;
     }
 
     public Matrix multiply(Matrix M1, Matrix M2) throws Exception {
-        if (M1.getRows() != M2.getCols()) {
+        if (M1.getCols() != M2.getRows()) {
             throw new Exception("Matrix dimensions do not match!");
         }
 
